@@ -1,28 +1,23 @@
 #include <stdio.h>
 
 #define MAXLINE 1000 	/* maximum input line size */
+#define TABSTOP 4 	/* the number of spaces a tab is */
 
 int max; 		/* maximum length seen so far */
 char line[MAXLINE]; 	/* current input */
-char longest[MAXLINE]; 	/* longest line saved */
 
 int getLine(void);
-void copy(void);
+void removeTabs(void);
 
 /* print longest input line; specialized version */
 main() {
 	int len;
 	extern int max;
-	extern char longest[];
+	char output[MAXLINE];
 
 	max = 0;
 	while ((len = getLine()) > 0)
-		if (len > max) {
-			max = len;
-			copy();
-		}
-	if (max > 0) 	/*there is a line */
-		printf("\n%s\n", longest);
+		removeTabs();
 	return 0;
 }
 
@@ -41,12 +36,24 @@ int getLine(void){
 	return i;
 }
 
-/* copy: specialized version */
-void copy(void) {
-	int i;
-	extern char line[], longest[];
+/* removeTabs: replaces tabs with spaces defined by TABSTOP */
+void removeTabs(void) {
+	int i, j;
+	extern char line[];
+	char temp[MAXLINE];
 
-	i = 0;
-	while ((longest[i] = line[i]) != '\0')
+	i = j = 0;
+	while (line[i] != '\0') {
+		if (line[i] == '\t') {
+			for (int t = 0; t < TABSTOP; t++)
+				temp[t+j] = ' ';
+			j += TABSTOP;
+		} else {
+			temp[j] = line[i];
+			j++;
+		}
 		i++;
+	}
+	temp[j] = '\0';
+	printf("%s\n", temp);
 }
