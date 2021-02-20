@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-std=c89 -lm
+CFLAGS=-std=c89
 
 all: ex2-4 ex2-5
 
